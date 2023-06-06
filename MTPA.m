@@ -13,7 +13,7 @@ function id_ref   = MTPA_id(iq,is)
     
     persistent delta_id;
     if isempty(delta_id)
-        delta_id = -1e-4;
+        delta_id = 1e-5;
     end
     
     persistent idref_reg;
@@ -23,7 +23,7 @@ function id_ref   = MTPA_id(iq,is)
     
     persistent is_last;
     if isempty(is_last)
-        is_last = zeros(1000,1);
+        is_last = 0;
     end
     
     persistent iqreg;
@@ -35,12 +35,7 @@ function id_ref   = MTPA_id(iq,is)
     
     idref_reg = idref_reg + delta_id;
     
-    for countFor = 1:500
-        isreg1 = isreg1 + is_last(countFor);
-        isreg2 = isreg2 + is_last(countFor+500);
-    end
-    
-    if isreg1>=isreg2+20
+    if is>=is_last
         delta_id = -delta_id;
     end
     
@@ -56,10 +51,7 @@ function id_ref   = MTPA_id(iq,is)
     %output id_ref
     id_ref = idref_reg;  
     
-    for countFor = 1:999
-        is_last(1001-countFor) = is_last(1000-countFor);
-    end
-    is_last(1) = is;
+    is_last = is;
     
     end
         
